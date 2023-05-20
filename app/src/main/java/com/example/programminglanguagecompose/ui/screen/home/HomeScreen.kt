@@ -1,6 +1,5 @@
 package com.example.programminglanguagecompose.ui.screen.home
 
-import android.util.Log
 import android.widget.Toast
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -8,14 +7,12 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
@@ -28,8 +25,9 @@ import com.example.programminglanguagecompose.data.model.Language
 import com.example.programminglanguagecompose.data.model.LanguagesData
 import com.example.programminglanguagecompose.ui.common.UiState
 import com.example.programminglanguagecompose.ui.theme.ProgrammingLanguageComposeTheme
-import com.example.programminglanguagecompose.ui.values.spacingSmaller
-import com.example.programminglanguagecompose.utils.Tag
+import com.example.programminglanguagecompose.ui.values.spacingRegular
+import com.example.programminglanguagecompose.ui.values.textLarge
+import com.example.programminglanguagecompose.ui.values.textRegular
 import com.example.programminglanguagecompose.utils.UiText.Companion.asString
 import com.example.programminglanguagecompose.utils.ViewModelFactory
 
@@ -93,36 +91,37 @@ fun ProgrammingLanguageItems(
 ) {
     Row(
         verticalAlignment = Alignment.CenterVertically,
-        modifier = modifier.clickable {}
+        modifier = modifier
+            .clickable {}
+            .padding(spacingRegular)
     ) {
         language.apply {
             AsyncImage(
                 model = photo,
                 contentDescription = null,
-                contentScale = ContentScale.Crop,
+                contentScale = ContentScale.Fit,
                 modifier = Modifier
-                    .padding(spacingSmaller)
-                    .size(60.dp)
-                    .clip(CircleShape)
+                    .padding(end = spacingRegular)
+                    .size(54.dp)
             )
             Column(
                 verticalArrangement = Arrangement.SpaceAround,
             ) {
                 Text(
                     text = name,
-                    fontWeight = FontWeight.Medium,
+                    fontWeight = FontWeight.SemiBold,
+                    fontSize = textLarge,
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(end = spacingSmaller),
                 )
                 Text(
                     text = detail,
                     fontWeight = FontWeight.Normal,
+                    fontSize = textRegular,
                     maxLines = 2,
                     overflow = TextOverflow.Ellipsis,
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(end = spacingSmaller),
                 )
             }
         }
