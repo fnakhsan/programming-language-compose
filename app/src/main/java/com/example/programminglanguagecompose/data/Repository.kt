@@ -16,11 +16,10 @@ class Repository(private val mFavDao: FavoriteDao) {
         emit(Resource.Loading)
         try {
             val response = LanguagesData.listData
-            Log.d(Tag.home, response.toString())
+            Log.d(Tag.repository, response.toString())
             emit(Resource.Success(response))
         } catch (e: Exception) {
-            e.printStackTrace()
-            Log.d(Tag.home, e.message.toString())
+            Log.e(Tag.repository, Log.getStackTraceString(e))
             emit(Resource.Error(UiText.DynamicString(e.message ?: "Unknown Error")))
         }
     }.flowOn(Dispatchers.IO)
@@ -31,9 +30,10 @@ class Repository(private val mFavDao: FavoriteDao) {
             val response = LanguagesData.listData.filter {
                 it.name.contains(query, ignoreCase = true)
             }
+            Log.d(Tag.repository, response.toString())
             emit(Resource.Success(response))
         } catch (e: Exception) {
-            e.printStackTrace()
+            Log.e(Tag.repository, Log.getStackTraceString(e))
             emit(Resource.Error(UiText.DynamicString(e.message ?: "Unknown Error")))
         }
     }.flowOn(Dispatchers.IO)

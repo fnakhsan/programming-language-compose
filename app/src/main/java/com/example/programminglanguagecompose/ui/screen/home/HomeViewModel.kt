@@ -45,14 +45,14 @@ class HomeViewModel(private val repository: Repository) : ViewModel() {
                 when (resource) {
                     Resource.Loading -> _listProgrammingLanguageState.emit(UiState.Loading(true))
                     is Resource.Success -> {
+                        _listProgrammingLanguageState.emit(UiState.Loading(false))
                         _listProgrammingLanguageState.emit(
                             if (resource.data.isNotEmpty()) UiState.Success(resource.data) else UiState.Empty
                         )
-                        _listProgrammingLanguageState.emit(UiState.Loading(false))
                     }
                     is Resource.Error -> {
-                        _listProgrammingLanguageState.emit(UiState.Error(resource.error))
                         _listProgrammingLanguageState.emit(UiState.Loading(false))
+                        _listProgrammingLanguageState.emit(UiState.Error(resource.error))
                     }
                 }
             }

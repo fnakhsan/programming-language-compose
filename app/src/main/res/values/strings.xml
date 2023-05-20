@@ -3,5 +3,6 @@
     <string name="home">Home</string>
     <string name="favorite">Favorite</string>
     <string name="profile">Profile</string>
+    <string name="search_hint">Find your programming language here!</string>
     <string name="text_error_unknown">Unknown Error.</string>
 </resources>
