@@ -1,26 +1,25 @@
 package com.example.programminglanguagecompose.data.local.database
 
-import androidx.lifecycle.LiveData
 import androidx.room.*
 import com.example.programminglanguagecompose.data.model.Language
 
 @Dao
 interface FavoriteDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insert(favorite: Language)
+    suspend fun insert(favorite: Language)
 
     @Query("SELECT * FROM language")
-    fun getAllChanges(): LiveData<List<Language>>
+    fun getAllFav(): List<Language>
 
-    @Query("SELECT * FROM language")
-    suspend fun getAll(): List<Language>
+    @Query("SELECT * FROM language WHERE language.name LIKE :name")
+    fun searchFav(name: String): List<Language>
 
-    @Query("SELECT COUNT(*) FROM language where language.name = :name")
-    fun countFav(name: String): Int
+    @Query("SELECT * FROM language WHERE language.name = :name")
+    fun getFav(name: String): Language
 
-    @Update
-    fun update(favorite: Language)
+    @Query("SELECT EXISTS(SELECT * FROM language WHERE language.name = :name)")
+    fun isFavorite(name: String): Boolean
 
     @Delete
-    fun delete(favorite: Language)
+    suspend fun delete(favorite: Language)
 }

@@ -1,5 +1,6 @@
 package com.example.programminglanguagecompose.ui
 
+import android.util.Log
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
@@ -26,6 +27,7 @@ import com.example.programminglanguagecompose.ui.screen.detail.DetailScreen
 import com.example.programminglanguagecompose.ui.screen.favorite.FavoriteScreen
 import com.example.programminglanguagecompose.ui.screen.home.HomeScreen
 import com.example.programminglanguagecompose.ui.screen.profile.ProfileScreen
+import com.example.programminglanguagecompose.utils.Tag
 
 @Composable
 fun ProgrammingLanguageComposeApp(
@@ -45,8 +47,22 @@ fun ProgrammingLanguageComposeApp(
         ) {
             composable(Screen.Home.route) {
                 HomeScreen(
-                    navigateToDetail = { name ->
-                        navController.navigate(Screen.DetailLanguage.createRoute(name))
+                    navigateToDetail = { languageName ->
+                        navController.navigate(Screen.DetailLanguage.createRoute(languageName))
+                        Log.d(Tag.repository, "This is the value that i pass to the detail: $languageName")
+                    }
+                )
+            }
+            composable(
+                route = Screen.DetailLanguage.route,
+                arguments = listOf(navArgument("languageName") { type = NavType.StringType }),
+            ) {
+                val name = it.arguments?.getString("languageName") ?: ""
+                Log.d(Tag.repository, "And this is what i got: $name")
+                DetailScreen(
+                    name = name,
+                    navigateBack = {
+                        navController.navigateUp()
                     }
                 )
             }
@@ -55,18 +71,6 @@ fun ProgrammingLanguageComposeApp(
             }
             composable(Screen.Profile.route) {
                 ProfileScreen()
-            }
-            composable(
-                route = Screen.DetailLanguage.route,
-                arguments = listOf(navArgument(keyName) { type = NavType.StringType }),
-            ) {
-                val name = it.arguments?.getString(keyName) ?: ""
-                DetailScreen(
-                    name = name,
-                    navigateBack = {
-                        navController.navigateUp()
-                    }
-                )
             }
         }
     }

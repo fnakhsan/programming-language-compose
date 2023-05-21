@@ -1,5 +1,6 @@
 package com.example.programminglanguagecompose.ui.components
 
+import android.util.Log
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.Text
@@ -9,14 +10,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import com.example.programminglanguagecompose.data.model.Language
-import com.example.programminglanguagecompose.data.model.LanguagesData
 import com.example.programminglanguagecompose.ui.values.spacingRegular
 import com.example.programminglanguagecompose.ui.values.textLarge
 import com.example.programminglanguagecompose.ui.values.textRegular
+import com.example.programminglanguagecompose.utils.Tag
 
 @Composable
 fun ProgrammingLanguageItems(
@@ -28,7 +28,10 @@ fun ProgrammingLanguageItems(
         Row(
             verticalAlignment = Alignment.CenterVertically,
             modifier = modifier
-                .clickable { navigateToDetail(name) }
+                .clickable {
+                    navigateToDetail(name)
+                    Log.d(Tag.repository, "Click: $name")
+                }
                 .padding(spacingRegular)
         ) {
             AsyncImage(

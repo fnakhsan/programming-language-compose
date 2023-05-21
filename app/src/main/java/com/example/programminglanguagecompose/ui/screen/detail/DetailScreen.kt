@@ -1,16 +1,24 @@
 package com.example.programminglanguagecompose.ui.screen.detail
 
+import android.annotation.SuppressLint
 import android.widget.Toast
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
+import androidx.compose.material.icons.filled.Favorite
+import androidx.compose.material.icons.outlined.Favorite
+import androidx.compose.material.icons.outlined.Home
+import androidx.compose.runtime.*
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
@@ -28,6 +36,7 @@ import com.example.programminglanguagecompose.ui.values.spacingRegular
 import com.example.programminglanguagecompose.utils.UiText.Companion.asString
 import com.example.programminglanguagecompose.utils.ViewModelFactory
 
+@SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
 fun DetailScreen(
     name: String,
@@ -38,6 +47,9 @@ fun DetailScreen(
     ),
 ) {
     val dataState = detailViewModel.detailUiState.collectAsState()
+    val favState = detailViewModel.favState.collectAsState()
+    var isFav by rememberSaveable { mutableStateOf(false) }
+    var language by rememberSaveable { mutableStateOf<Language?>(null) }
     Scaffold(
         topBar = {
             TopAppBar(
@@ -60,6 +72,42 @@ fun DetailScreen(
                     }
                 }
             )
+        },
+        floatingActionButton = {
+            FloatingActionButton(
+                modifier = Modifier.padding(spacingRegular),
+                onClick = {
+                    detailViewModel.apply {
+                        language?.let { if (isFav) removeFromFavorite(it) else addedToFavorite(it) }
+                    }
+                }
+            ) {
+                favState.value.let { state ->
+                    when (state) {
+                        UiState.Initial -> detailViewModel.isFavorite(name)
+                        is UiState.Loading -> CircularProgressIndicator()
+                        is UiState.Empty -> {}
+                        is UiState.Success -> {
+                            isFav = state.data
+                            Icon(
+                                imageVector =
+                                if (state.data) {
+                                    Icons.Default.Favorite
+                                } else {
+                                    Icons.Outlined.Favorite
+                                },
+                                tint = if (state.data) Color.Red else Color.White,
+                                contentDescription = if (state.data) "Favored" else "Not Favored"
+                            )
+                        }
+                        is UiState.Error -> Toast.makeText(
+                            LocalContext.current,
+                            state.error.asString(LocalContext.current),
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
+                }
+            }
         }
     ) {
         dataState.value.let { state ->
@@ -67,7 +115,10 @@ fun DetailScreen(
                 UiState.Initial -> detailViewModel.getLanguageDetails(name)
                 is UiState.Loading -> CircularProgressIndicator()
                 is UiState.Empty -> HomeScreenEmptyContent()
-                is UiState.Success -> DetailScreenContent(state.data, it)
+                is UiState.Success -> {
+                    language = state.data
+                    DetailScreenContent(state.data)
+                }
                 is UiState.Error -> Toast.makeText(
                     LocalContext.current,
                     state.error.asString(LocalContext.current),
@@ -81,7 +132,6 @@ fun DetailScreen(
 @Composable
 fun DetailScreenContent(
     language: Language,
-    paddingValues: PaddingValues,
 ) {
     Column(
         modifier = Modifier
@@ -146,109 +196,3 @@ fun DetailScreenContent(
         }
     }
 }
-
-
-//@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter", "UnusedCrossfadeTargetStateParameter")
-//@OptIn(ExperimentalMaterial3Api::class)
-//@Composable
-//fun DetailScreen(
-//    navHostController: NavHostController,
-//    animeID: Int,
-//    anime: Resource<Anime>,
-//    initiate: (Int) -> Unit,
-//    updateAnimeByAnimeID: (Int) -> Unit
-//) {
-//    val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
-//    val scrollState = rememberScrollState()
-//
-//    var isDataInitiated by remember {
-//        mutableStateOf(false)
-//    }
-//    if (!isDataInitiated) {
-//        initiate(animeID)
-//        isDataInitiated = true
-//    }
-//    val snackbarHostState = remember {
-//        SnackbarHostState()
-//    }
-//    Scaffold(
-//        topBar = {
-//            TopAppBar(
-//                modifier = Modifier,
-//                title = {
-//                    Text(
-//                        text = "Detail Anime",
-//                        style = MaterialTheme.typography.titleMedium,
-//                    )
-//                },
-//                navigationIcon = {
-//                    IconButton(
-//                        onClick = {
-//                            navHostController.popBackStack()
-//                        }) {
-//                        Icon(
-//                            imageVector = Icons.Filled.ArrowBack,
-//                            contentDescription = "Navigation Icon",
-//                        )
-//                    }
-//                },
-//                colors = TopAppBarDefaults.smallTopAppBarColors(
-//                    scrolledContainerColor = MaterialTheme.colorScheme.background,
-//                    containerColor = Color.Transparent,
-//                    titleContentColor =
-//                    if (scrollState.value == 0) {
-//                        Color.White
-//                    } else {
-//                        if (isSystemInDarkTheme()) Color.White
-//                        else Color.Black
-//                    },
-//                    navigationIconContentColor =
-//                    if (scrollState.value == 0) {
-//                        Color.White
-//                    } else {
-//                        if (isSystemInDarkTheme()) Color.White
-//                        else Color.Black
-//                    }
-//                ),
-//                scrollBehavior = scrollBehavior
-//            )
-//        },
-//        floatingActionButton = {
-//            when (anime) {
-//                is Resource.Success -> {
-//                    FloatingActionButton(
-//                        modifier = Modifier
-//                            .padding(16.dp),
-//                        onClick = {
-//                            updateAnimeByAnimeID(animeID)
-//                        },
-//                        containerColor = MaterialTheme.colorScheme.primary
-//                    ) {
-//                        Crossfade(targetState = anime.data?.isFavorite, label = "") {
-//                            Icon(
-//                                imageVector =
-//                                if (anime.data?.isFavorite as Boolean) {
-//                                    Icons.Default.Favorite
-//                                } else {
-//                                    Icons.Default.FavoriteBorder
-//                                },
-//                                tint = Color.White,
-//                                contentDescription = "Favorite Button"
-//                            )
-//                        }
-//                    }
-//                }
-//
-//                else -> Unit
-//            }
-//        },
-//        snackbarHost = {
-//            SnackbarHost(snackbarHostState)
-//
-//        }
-//}
-//
-//else -> Unit
-//}
-//}
-//}

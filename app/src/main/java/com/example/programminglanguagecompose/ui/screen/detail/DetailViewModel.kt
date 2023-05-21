@@ -6,14 +6,19 @@ import com.example.programminglanguagecompose.data.Repository
 import com.example.programminglanguagecompose.data.Resource
 import com.example.programminglanguagecompose.data.model.Language
 import com.example.programminglanguagecompose.ui.common.UiState
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
-class DetailViewModel(private val repository: Repository): ViewModel() {
+class DetailViewModel(private val repository: Repository) : ViewModel() {
     private val _detailUiState =
         MutableStateFlow<UiState<Language>>(UiState.Initial)
     val detailUiState = _detailUiState.asStateFlow()
+
+    private val _favState =
+        MutableStateFlow<UiState<Boolean>>(UiState.Initial)
+    val favState = _favState.asStateFlow()
 
     fun getLanguageDetails(name: String) {
         viewModelScope.launch {
@@ -31,5 +36,33 @@ class DetailViewModel(private val repository: Repository): ViewModel() {
                 }
             }
         }
+    }
+
+    fun isFavorite(name: String) {
+        viewModelScope.launch {
+            repository.isFavorite(name = name).collect { resource ->
+                when (resource) {
+                    Resource.Loading -> _favState.emit(UiState.Loading(true))
+                    is Resource.Success -> {
+                        _favState.emit(UiState.Loading(false))
+                        _favState.emit(UiState.Success(resource.data))
+                    }
+                    is Resource.Error -> {
+                        _favState.emit(UiState.Loading(false))
+                        _favState.emit(UiState.Error(resource.error))
+                    }
+                }
+            }
+        }
+    }
+
+    fun addedToFavorite(language: Language) = viewModelScope.launch(Dispatchers.IO) {
+        repository.addedToFavorite(language)
+        _favState.emit(UiState.Success(data = true))
+    }
+
+    fun removeFromFavorite(language: Language) = viewModelScope.launch(Dispatchers.IO) {
+        repository.removeFromFavorite(language)
+        _favState.emit(UiState.Success(data = false))
     }
 }

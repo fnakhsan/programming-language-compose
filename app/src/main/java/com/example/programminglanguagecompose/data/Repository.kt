@@ -38,13 +38,43 @@ class Repository(private val mFavDao: FavoriteDao) {
         }
     }.flowOn(Dispatchers.IO)
 
+    fun getFavoriteLanguages(): Flow<Resource<List<Language>>> = flow {
+        emit(Resource.Loading)
+        try {
+            val response = mFavDao.getAllFav()
+            Log.d(Tag.repository, response.toString())
+            emit(Resource.Success(response))
+        } catch (e: Exception) {
+            Log.e(Tag.repository, Log.getStackTraceString(e))
+            emit(Resource.Error(UiText.DynamicString(e.message ?: "Unknown Error")))
+        }
+    }.flowOn(Dispatchers.IO)
+
+    fun searchFavLanguages(query: String): Flow<Resource<List<Language>>> = flow {
+        emit(Resource.Loading)
+        try {
+            val response = mFavDao.searchFav(query)
+            Log.d(Tag.repository, response.toString())
+            emit(Resource.Success(response))
+        } catch (e: Exception) {
+            Log.e(Tag.repository, Log.getStackTraceString(e))
+            emit(Resource.Error(UiText.DynamicString(e.message ?: "Unknown Error")))
+        }
+    }.flowOn(Dispatchers.IO)
+
     fun getLanguageDetails(name: String): Flow<Resource<Language>> = flow {
         emit(Resource.Loading)
         try {
             //lol idk how to create a proper filtering for this
-            val response: Language = LanguagesData.listData.first {
-                it.name.contains(name)
+            val response: Language = LanguagesData.listData.last {
+                val patterns = Regex(name)
+                patterns.matches(it.name)
             }
+            val list = LanguagesData.listData.filter {
+                val patterns = Regex(name)
+                patterns.matches(it.name)
+            }
+            Log.d(Tag.repository, "list: $list")
             Log.d(Tag.repository, response.toString())
             emit(Resource.Success(response))
         } catch (e: Exception) {
@@ -57,6 +87,27 @@ class Repository(private val mFavDao: FavoriteDao) {
                     emit(Resource.Error(UiText.DynamicString(e.message ?: "Unknown Error")))
                 }
             }
+        }
+    }.flowOn(Dispatchers.IO)
+
+    suspend fun addedToFavorite(language: Language) {
+        mFavDao.insert(language)
+    }
+
+    suspend fun removeFromFavorite(language: Language) {
+        mFavDao.delete(language)
+    }
+
+    fun isFavorite(name: String): Flow<Resource<Boolean>> = flow {
+        emit(Resource.Loading)
+        try {
+            //lol idk how to create a proper filtering for this
+            val response = mFavDao.isFavorite(name)
+            Log.d(Tag.repository, response.toString())
+            emit(Resource.Success(response))
+        } catch (e: Exception) {
+            Log.e(Tag.repository, Log.getStackTraceString(e))
+            emit(Resource.Error(UiText.DynamicString(e.message ?: "Unknown Error")))
         }
     }.flowOn(Dispatchers.IO)
 
