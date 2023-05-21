@@ -4,7 +4,6 @@ import android.widget.Toast
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
@@ -21,23 +20,17 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import coil.compose.AsyncImage
 import com.example.programminglanguagecompose.R
 import com.example.programminglanguagecompose.data.model.Language
-import com.example.programminglanguagecompose.data.model.LanguagesData
 import com.example.programminglanguagecompose.ui.common.UiState
+import com.example.programminglanguagecompose.ui.components.ProgrammingLanguageItems
 import com.example.programminglanguagecompose.ui.theme.ProgrammingLanguageComposeTheme
 import com.example.programminglanguagecompose.ui.values.spacingRegular
-import com.example.programminglanguagecompose.ui.values.textLarge
-import com.example.programminglanguagecompose.ui.values.textRegular
 import com.example.programminglanguagecompose.utils.UiText.Companion.asString
 import com.example.programminglanguagecompose.utils.ViewModelFactory
 
@@ -47,6 +40,7 @@ fun HomeScreen(
     homeViewModel: HomeViewModel = viewModel(
         factory = ViewModelFactory.getInstance(LocalContext.current)
     ),
+    navigateToDetail: (String) -> Unit,
 ) {
     val listDataState = homeViewModel.listProgrammingLanguageState.collectAsState()
     val query by homeViewModel.query
@@ -56,7 +50,7 @@ fun HomeScreen(
     ) {
         SearchBar(
             query = query,
-            onQueryChange = homeViewModel::searchListProgrammingLanguages,
+            onQueryChange = homeViewModel::searchLanguages,
             modifier = Modifier.background(MaterialTheme.colors.primary)
         )
         Box(
@@ -66,10 +60,10 @@ fun HomeScreen(
             val listState = rememberLazyListState()
             listDataState.value.let { state ->
                 when (state) {
-                    UiState.Initial -> homeViewModel.getListProgrammingLanguages()
+                    UiState.Initial -> homeViewModel.getLanguages()
                     is UiState.Loading -> CircularProgressIndicator()
                     is UiState.Empty -> HomeScreenEmptyContent()
-                    is UiState.Success -> HomeScreenContent(listState, state.data,)
+                    is UiState.Success -> HomeScreenContent(listState, state.data, navigateToDetail = navigateToDetail)
                     is UiState.Error -> Toast.makeText(
                         LocalContext.current,
                         state.error.asString(LocalContext.current),
@@ -124,68 +118,25 @@ fun HomeScreenContent(
     listState: LazyListState,
     data: List<Language>,
     modifier: Modifier = Modifier,
+    navigateToDetail: (String) -> Unit,
 ) {
     LazyColumn(
         state = listState,
         contentPadding = PaddingValues(bottom = 80.dp)
     ) {
-//        IDK why we must put this item{} code
-//        (if you delete it then the list will not automatically scroll to the top,
-//        when the user delete the search query)
         item {
-
+//            IDK why we must put this item {} code
+//            (if you delete it then the list will not automatically scroll to the top,
+//            when the user delete the search query)
         }
         items(data, key = { it.name }) { language ->
             ProgrammingLanguageItems(
                 language,
                 modifier = modifier
                     .fillMaxWidth()
-                    .animateItemPlacement(tween(durationMillis = 100))
+                    .animateItemPlacement(tween(durationMillis = 100)),
+                navigateToDetail = navigateToDetail
             )
-        }
-    }
-}
-
-@Composable
-fun ProgrammingLanguageItems(
-    language: Language,
-    modifier: Modifier = Modifier
-) {
-    Row(
-        verticalAlignment = Alignment.CenterVertically,
-        modifier = modifier
-            .clickable {}
-            .padding(spacingRegular)
-    ) {
-        language.apply {
-            AsyncImage(
-                model = photo,
-                contentDescription = null,
-                contentScale = ContentScale.Fit,
-                modifier = Modifier
-                    .padding(end = spacingRegular)
-                    .size(54.dp)
-            )
-            Column(
-                verticalArrangement = Arrangement.SpaceAround,
-            ) {
-                Text(
-                    text = name,
-                    fontWeight = FontWeight.SemiBold,
-                    fontSize = textLarge,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                )
-                Text(
-                    text = detail,
-                    fontWeight = FontWeight.Normal,
-                    fontSize = textRegular,
-                    maxLines = 2,
-                    overflow = TextOverflow.Ellipsis,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                )
-            }
         }
     }
 }
@@ -195,14 +146,10 @@ fun ProgrammingLanguageItems(
 @Composable
 fun HomeScreenPreview() {
     ProgrammingLanguageComposeTheme {
-        HomeScreen()
+//        HomeScreen(
+//            navigateToDetail = { name ->
+//                navController.navigate(Screen.DetailLanguage.createRoute(name))
+//            }
+//        )
     }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun ProgrammingLanguageItemsPreview() {
-    ProgrammingLanguageItems(
-        language = LanguagesData.listData[0]
-    )
 }

@@ -12,13 +12,17 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
 import com.example.programminglanguagecompose.R.string
 import com.example.programminglanguagecompose.ui.navigation.NavigationItem
 import com.example.programminglanguagecompose.ui.navigation.Screen
+import com.example.programminglanguagecompose.ui.navigation.keyName
+import com.example.programminglanguagecompose.ui.screen.detail.DetailScreen
 import com.example.programminglanguagecompose.ui.screen.favorite.FavoriteScreen
 import com.example.programminglanguagecompose.ui.screen.home.HomeScreen
 import com.example.programminglanguagecompose.ui.screen.profile.ProfileScreen
@@ -40,13 +44,29 @@ fun ProgrammingLanguageComposeApp(
             modifier = Modifier.padding(innerPadding)
         ) {
             composable(Screen.Home.route) {
-                HomeScreen()
+                HomeScreen(
+                    navigateToDetail = { name ->
+                        navController.navigate(Screen.DetailLanguage.createRoute(name))
+                    }
+                )
             }
             composable(Screen.Favorite.route) {
                 FavoriteScreen()
             }
             composable(Screen.Profile.route) {
                 ProfileScreen()
+            }
+            composable(
+                route = Screen.DetailLanguage.route,
+                arguments = listOf(navArgument(keyName) { type = NavType.StringType }),
+            ) {
+                val name = it.arguments?.getString(keyName) ?: ""
+                DetailScreen(
+                    name = name,
+                    navigateBack = {
+                        navController.navigateUp()
+                    }
+                )
             }
         }
     }

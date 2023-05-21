@@ -12,3 +12,4 @@ val spacingLarger = 24.dp
 
 val textRegular = 14.sp
 val textLarge = 16.sp
+val textLarger = 18.sp

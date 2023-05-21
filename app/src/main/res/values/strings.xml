@@ -5,4 +5,8 @@
     <string name="profile">Profile</string>
     <string name="search_hint">Find your programming language here!</string>
     <string name="text_error_unknown">Unknown Error.</string>
+    <string name="developer">Developer</string>
+    <string name="paradigm">Paradigm</string>
+    <string name="text_detail">Language Details</string>
+    <string name="back_hint">Return to home</string>
 </resources>

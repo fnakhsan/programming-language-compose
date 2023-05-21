@@ -38,6 +38,28 @@ class Repository(private val mFavDao: FavoriteDao) {
         }
     }.flowOn(Dispatchers.IO)
 
+    fun getLanguageDetails(name: String): Flow<Resource<Language>> = flow {
+        emit(Resource.Loading)
+        try {
+            //lol idk how to create a proper filtering for this
+            val response: Language = LanguagesData.listData.first {
+                it.name.contains(name)
+            }
+            Log.d(Tag.repository, response.toString())
+            emit(Resource.Success(response))
+        } catch (e: Exception) {
+            Log.e(Tag.repository, Log.getStackTraceString(e))
+            when (e) {
+                is NoSuchElementException -> {
+                    emit(Resource.Error(UiText.DynamicString("Language details cannot be found")))
+                }
+                else -> {
+                    emit(Resource.Error(UiText.DynamicString(e.message ?: "Unknown Error")))
+                }
+            }
+        }
+    }.flowOn(Dispatchers.IO)
+
     companion object {
         @Volatile
         private var instance: Repository? = null

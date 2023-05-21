@@ -20,7 +20,7 @@ class HomeViewModel(private val repository: Repository) : ViewModel() {
     private val _query = mutableStateOf("")
     val query: State<String> get() = _query
 
-    fun getListProgrammingLanguages() {
+    fun getLanguages() {
         viewModelScope.launch {
             repository.getLanguages().collect { resource ->
                 when (resource) {
@@ -38,7 +38,7 @@ class HomeViewModel(private val repository: Repository) : ViewModel() {
         }
     }
 
-    fun searchListProgrammingLanguages(newQuery: String) {
+    fun searchLanguages(newQuery: String) {
         _query.value = newQuery
         viewModelScope.launch {
             repository.searchLanguages(newQuery).collect { resource ->

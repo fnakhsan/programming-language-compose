@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.example.programminglanguagecompose.data.Repository
 import com.example.programminglanguagecompose.di.Injection
+import com.example.programminglanguagecompose.ui.screen.detail.DetailViewModel
 import com.example.programminglanguagecompose.ui.screen.home.HomeViewModel
 
 class ViewModelFactory private constructor(private val repository: Repository): ViewModelProvider.NewInstanceFactory(){
@@ -13,7 +14,7 @@ class ViewModelFactory private constructor(private val repository: Repository): 
         when {
             modelClass.isAssignableFrom(HomeViewModel::class.java) -> return HomeViewModel(repository) as T
 //            modelClass.isAssignableFrom(FavoriteViewModel::class.java) -> return FavoriteViewModel(repository) as T
-//            modelClass.isAssignableFrom(DetailViewModel::class.java) -> return DetailViewModel(repository) as T
+            modelClass.isAssignableFrom(DetailViewModel::class.java) -> return DetailViewModel(repository) as T
 //            modelClass.isAssignableFrom(FollowViewModel::class.java) -> return FollowViewModel(repository) as T
         }
         throw IllegalArgumentException("Unknown ViewModel Class: " + modelClass.name)
