@@ -62,19 +62,13 @@ class Repository(private val mFavDao: FavoriteDao) {
         }
     }.flowOn(Dispatchers.IO)
 
-    fun getLanguageDetails(name: String): Flow<Resource<Language>> = flow {
+    fun getLanguageDetails(id: Int): Flow<Resource<Language>> = flow {
         emit(Resource.Loading)
         try {
             //lol idk how to create a proper filtering for this
-            val response: Language = LanguagesData.listData.last {
-                val patterns = Regex(name)
-                patterns.matches(it.name)
+            val response: Language = LanguagesData.listData.first {
+                it.id == id
             }
-            val list = LanguagesData.listData.filter {
-                val patterns = Regex(name)
-                patterns.matches(it.name)
-            }
-            Log.d(Tag.repository, "list: $list")
             Log.d(Tag.repository, response.toString())
             emit(Resource.Success(response))
         } catch (e: Exception) {
@@ -98,11 +92,11 @@ class Repository(private val mFavDao: FavoriteDao) {
         mFavDao.delete(language)
     }
 
-    fun isFavorite(name: String): Flow<Resource<Boolean>> = flow {
+    fun isFavorite(id: Int): Flow<Resource<Boolean>> = flow {
         emit(Resource.Loading)
         try {
             //lol idk how to create a proper filtering for this
-            val response = mFavDao.isFavorite(name)
+            val response = mFavDao.isFavorite(id)
             Log.d(Tag.repository, response.toString())
             emit(Resource.Success(response))
         } catch (e: Exception) {

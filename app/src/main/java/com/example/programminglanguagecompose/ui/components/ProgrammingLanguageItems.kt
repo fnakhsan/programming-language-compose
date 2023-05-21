@@ -22,15 +22,15 @@ import com.example.programminglanguagecompose.utils.Tag
 fun ProgrammingLanguageItems(
     language: Language,
     modifier: Modifier = Modifier,
-    navigateToDetail: (String) -> Unit,
+    navigateToDetail: (Int) -> Unit,
 ) {
     language.apply {
         Row(
             verticalAlignment = Alignment.CenterVertically,
             modifier = modifier
                 .clickable {
-                    navigateToDetail(name)
-                    Log.d(Tag.repository, "Click: $name")
+                    navigateToDetail(id)
+                    Log.d(Tag.repository, "Click: $id")
                 }
                 .padding(spacingRegular)
         ) {

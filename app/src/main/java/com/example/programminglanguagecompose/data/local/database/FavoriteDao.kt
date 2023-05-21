@@ -17,8 +17,8 @@ interface FavoriteDao {
     @Query("SELECT * FROM language WHERE language.name = :name")
     fun getFav(name: String): Language
 
-    @Query("SELECT EXISTS(SELECT * FROM language WHERE language.name = :name)")
-    fun isFavorite(name: String): Boolean
+    @Query("SELECT EXISTS(SELECT * FROM language WHERE language.id = :id)")
+    fun isFavorite(id: Int): Boolean
 
     @Delete
     suspend fun delete(favorite: Language)

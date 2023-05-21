@@ -12,8 +12,8 @@ import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Favorite
-import androidx.compose.material.icons.outlined.Favorite
-import androidx.compose.material.icons.outlined.Home
+//import androidx.compose.material.icons.outlined.Favorite
+import androidx.compose.material.icons.twotone.Favorite
 import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
@@ -39,7 +39,7 @@ import com.example.programminglanguagecompose.utils.ViewModelFactory
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
 fun DetailScreen(
-    name: String,
+    id: Int,
     navigateBack: () -> Unit,
     modifier: Modifier = Modifier,
     detailViewModel: DetailViewModel = viewModel(
@@ -84,7 +84,7 @@ fun DetailScreen(
             ) {
                 favState.value.let { state ->
                     when (state) {
-                        UiState.Initial -> detailViewModel.isFavorite(name)
+                        UiState.Initial -> detailViewModel.isFavorite(id)
                         is UiState.Loading -> CircularProgressIndicator()
                         is UiState.Empty -> {}
                         is UiState.Success -> {
@@ -94,9 +94,9 @@ fun DetailScreen(
                                 if (state.data) {
                                     Icons.Default.Favorite
                                 } else {
-                                    Icons.Outlined.Favorite
+                                    Icons.TwoTone.Favorite
                                 },
-                                tint = if (state.data) Color.Red else Color.White,
+                                tint = Color.White,
                                 contentDescription = if (state.data) "Favored" else "Not Favored"
                             )
                         }
@@ -112,7 +112,7 @@ fun DetailScreen(
     ) {
         dataState.value.let { state ->
             when (state) {
-                UiState.Initial -> detailViewModel.getLanguageDetails(name)
+                UiState.Initial -> detailViewModel.getLanguageDetails(id)
                 is UiState.Loading -> CircularProgressIndicator()
                 is UiState.Empty -> HomeScreenEmptyContent()
                 is UiState.Success -> {

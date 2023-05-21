@@ -20,9 +20,9 @@ class DetailViewModel(private val repository: Repository) : ViewModel() {
         MutableStateFlow<UiState<Boolean>>(UiState.Initial)
     val favState = _favState.asStateFlow()
 
-    fun getLanguageDetails(name: String) {
+    fun getLanguageDetails(id: Int) {
         viewModelScope.launch {
-            repository.getLanguageDetails(name = name).collect { resource ->
+            repository.getLanguageDetails(id = id).collect { resource ->
                 when (resource) {
                     Resource.Loading -> _detailUiState.emit(UiState.Loading(true))
                     is Resource.Success -> {
@@ -38,9 +38,9 @@ class DetailViewModel(private val repository: Repository) : ViewModel() {
         }
     }
 
-    fun isFavorite(name: String) {
+    fun isFavorite(id: Int) {
         viewModelScope.launch {
-            repository.isFavorite(name = name).collect { resource ->
+            repository.isFavorite(id = id).collect { resource ->
                 when (resource) {
                     Resource.Loading -> _favState.emit(UiState.Loading(true))
                     is Resource.Success -> {

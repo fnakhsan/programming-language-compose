@@ -40,7 +40,7 @@ fun HomeScreen(
     homeViewModel: HomeViewModel = viewModel(
         factory = ViewModelFactory.getInstance(LocalContext.current)
     ),
-    navigateToDetail: (String) -> Unit,
+    navigateToDetail: (Int) -> Unit,
 ) {
     val listDataState = homeViewModel.listProgrammingLanguageState.collectAsState()
     val query by homeViewModel.query
@@ -118,7 +118,7 @@ fun HomeScreenContent(
     listState: LazyListState,
     data: List<Language>,
     modifier: Modifier = Modifier,
-    navigateToDetail: (String) -> Unit,
+    navigateToDetail: (Int) -> Unit,
 ) {
     LazyColumn(
         state = listState,

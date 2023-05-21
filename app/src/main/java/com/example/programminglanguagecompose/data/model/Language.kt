@@ -10,6 +10,9 @@ import kotlinx.parcelize.Parcelize
 @Parcelize
 data class Language(
     @PrimaryKey(autoGenerate = false)
+    @ColumnInfo(name = "id")
+    var id: Int = 0,
+
     @ColumnInfo(name = "name")
     var name: String = "",
 

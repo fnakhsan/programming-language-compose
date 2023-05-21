@@ -3,7 +3,22 @@ package com.example.programminglanguagecompose.data.model
 import com.example.programminglanguagecompose.R
 
 object LanguagesData {
-    private val languageNames = arrayOf("C",
+    private val languageId = arrayOf(
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11
+    )
+    private val languageNames = arrayOf(
+        "C",
         "Java",
         "C++",
         "C#",
@@ -78,6 +93,7 @@ object LanguagesData {
             val list = arrayListOf<Language>()
             for (position in languageNames.indices) {
                 val language = Language()
+                language.id = languageId[position]
                 language.name = languageNames[position]
                 language.developer = languageDeveloper[position]
                 language.paradigm = languageParadigm[position]

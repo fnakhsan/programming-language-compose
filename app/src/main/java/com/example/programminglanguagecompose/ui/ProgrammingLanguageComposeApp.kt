@@ -22,7 +22,7 @@ import androidx.navigation.navArgument
 import com.example.programminglanguagecompose.R.string
 import com.example.programminglanguagecompose.ui.navigation.NavigationItem
 import com.example.programminglanguagecompose.ui.navigation.Screen
-import com.example.programminglanguagecompose.ui.navigation.keyName
+import com.example.programminglanguagecompose.ui.navigation.keyId
 import com.example.programminglanguagecompose.ui.screen.detail.DetailScreen
 import com.example.programminglanguagecompose.ui.screen.favorite.FavoriteScreen
 import com.example.programminglanguagecompose.ui.screen.home.HomeScreen
@@ -34,9 +34,13 @@ fun ProgrammingLanguageComposeApp(
     modifier: Modifier = Modifier,
     navController: NavHostController = rememberNavController(),
 ) {
+    val navBackStackEntry by navController.currentBackStackEntryAsState()
+    val currentRoute = navBackStackEntry?.destination?.route
     Scaffold(
         bottomBar = {
-            BottomBar(navController)
+            if (currentRoute != Screen.DetailLanguage.route) {
+                BottomBar(navController)
+            }
         },
         modifier = Modifier
     ) { innerPadding ->
@@ -47,20 +51,20 @@ fun ProgrammingLanguageComposeApp(
         ) {
             composable(Screen.Home.route) {
                 HomeScreen(
-                    navigateToDetail = { languageName ->
-                        navController.navigate(Screen.DetailLanguage.createRoute(languageName))
-                        Log.d(Tag.repository, "This is the value that i pass to the detail: $languageName")
+                    navigateToDetail = { keyId ->
+                        navController.navigate(Screen.DetailLanguage.createRoute(keyId))
+                        Log.d(Tag.repository, "This is the value that i pass to the detail: $keyId")
                     }
                 )
             }
             composable(
                 route = Screen.DetailLanguage.route,
-                arguments = listOf(navArgument("languageName") { type = NavType.StringType }),
+                arguments = listOf(navArgument(keyId) { type = NavType.IntType }),
             ) {
-                val name = it.arguments?.getString("languageName") ?: ""
-                Log.d(Tag.repository, "And this is what i got: $name")
+                val id = it.arguments?.getInt(keyId) ?: -1
+                Log.d(Tag.repository, "And this is what i got: $id")
                 DetailScreen(
-                    name = name,
+                    id = id,
                     navigateBack = {
                         navController.navigateUp()
                     }
