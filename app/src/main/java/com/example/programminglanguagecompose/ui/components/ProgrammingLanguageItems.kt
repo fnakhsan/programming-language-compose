@@ -16,7 +16,7 @@ import com.example.programminglanguagecompose.data.model.Language
 import com.example.programminglanguagecompose.ui.values.spacingRegular
 import com.example.programminglanguagecompose.ui.values.textLarge
 import com.example.programminglanguagecompose.ui.values.textRegular
-import com.example.programminglanguagecompose.utils.Tag
+import com.example.programminglanguagecompose.utils.Const
 
 @Composable
 fun ProgrammingLanguageItems(
@@ -30,7 +30,7 @@ fun ProgrammingLanguageItems(
             modifier = modifier
                 .clickable {
                     navigateToDetail(id)
-                    Log.d(Tag.repository, "Click: $id")
+                    Log.d(Const.repository, "Click: $id")
                 }
                 .padding(spacingRegular)
         ) {

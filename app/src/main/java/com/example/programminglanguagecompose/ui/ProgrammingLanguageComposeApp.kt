@@ -21,11 +21,11 @@ import androidx.navigation.navArgument
 import com.example.programminglanguagecompose.R.string
 import com.example.programminglanguagecompose.ui.navigation.NavigationItem
 import com.example.programminglanguagecompose.ui.navigation.Screen
-import com.example.programminglanguagecompose.ui.navigation.keyId
 import com.example.programminglanguagecompose.ui.screen.detail.DetailScreen
 import com.example.programminglanguagecompose.ui.screen.favorite.FavoriteScreen
 import com.example.programminglanguagecompose.ui.screen.home.HomeScreen
 import com.example.programminglanguagecompose.ui.screen.profile.ProfileScreen
+import com.example.programminglanguagecompose.utils.Const.navKeyId
 
 @Composable
 fun ProgrammingLanguageComposeApp(
@@ -49,15 +49,15 @@ fun ProgrammingLanguageComposeApp(
         ) {
             composable(Screen.Home.route) {
                 HomeScreen(
-                    navigateToDetail = { keyId ->
-                        navController.navigate(Screen.DetailLanguage.createRoute(keyId))
+                    navigateToDetail = { navKeyId ->
+                        navController.navigate(Screen.DetailLanguage.createRoute(navKeyId))
                     }
                 )
             }
             composable(Screen.Favorite.route) {
                 FavoriteScreen(
-                    navigateToDetail = { keyId ->
-                        navController.navigate(Screen.DetailLanguage.createRoute(keyId))
+                    navigateToDetail = { navKeyId ->
+                        navController.navigate(Screen.DetailLanguage.createRoute(navKeyId))
                     }
                 )
             }
@@ -66,9 +66,9 @@ fun ProgrammingLanguageComposeApp(
             }
             composable(
                 route = Screen.DetailLanguage.route,
-                arguments = listOf(navArgument(keyId) { type = NavType.IntType }),
+                arguments = listOf(navArgument(navKeyId) { type = NavType.IntType }),
             ) {
-                val id = it.arguments?.getInt(keyId) ?: -1
+                val id = it.arguments?.getInt(navKeyId) ?: -1
                 DetailScreen(
                     id = id,
                     navigateBack = {

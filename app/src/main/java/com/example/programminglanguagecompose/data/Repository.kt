@@ -5,7 +5,7 @@ import com.example.programminglanguagecompose.R
 import com.example.programminglanguagecompose.data.local.database.FavoriteDao
 import com.example.programminglanguagecompose.data.model.Language
 import com.example.programminglanguagecompose.data.model.LanguagesData
-import com.example.programminglanguagecompose.utils.Tag
+import com.example.programminglanguagecompose.utils.Const
 import com.example.programminglanguagecompose.utils.UiText
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
@@ -17,10 +17,10 @@ class Repository(private val mFavDao: FavoriteDao) {
         emit(Resource.Loading)
         try {
             val response = LanguagesData.listData
-            Log.d(Tag.repository, response.toString())
+            Log.d(Const.repository, response.toString())
             emit(Resource.Success(response))
         } catch (e: Exception) {
-            Log.e(Tag.repository, Log.getStackTraceString(e))
+            Log.e(Const.repository, Log.getStackTraceString(e))
             emit(Resource.Error(UiText.DynamicString(e.message ?: "Unknown Error")))
         }
     }.flowOn(Dispatchers.IO)
@@ -31,10 +31,10 @@ class Repository(private val mFavDao: FavoriteDao) {
             val response = LanguagesData.listData.filter {
                 it.name.contains(query, ignoreCase = true)
             }
-            Log.d(Tag.repository, response.toString())
+            Log.d(Const.repository, response.toString())
             emit(Resource.Success(response))
         } catch (e: Exception) {
-            Log.e(Tag.repository, Log.getStackTraceString(e))
+            Log.e(Const.repository, Log.getStackTraceString(e))
             emit(Resource.Error(UiText.DynamicString(e.message ?: "Unknown Error")))
         }
     }.flowOn(Dispatchers.IO)
@@ -43,10 +43,10 @@ class Repository(private val mFavDao: FavoriteDao) {
         emit(Resource.Loading)
         try {
             val response = mFavDao.getAllFav()
-            Log.d(Tag.repository, response.toString())
+            Log.d(Const.repository, response.toString())
             emit(Resource.Success(response))
         } catch (e: Exception) {
-            Log.e(Tag.repository, Log.getStackTraceString(e))
+            Log.e(Const.repository, Log.getStackTraceString(e))
             emit(Resource.Error(UiText.DynamicString(e.message ?: "Unknown Error")))
         }
     }.flowOn(Dispatchers.IO)
@@ -55,10 +55,10 @@ class Repository(private val mFavDao: FavoriteDao) {
         emit(Resource.Loading)
         try {
             val response = mFavDao.searchFav("%$query%")
-            Log.d(Tag.repository, response.toString())
+            Log.d(Const.repository, response.toString())
             emit(Resource.Success(response))
         } catch (e: Exception) {
-            Log.e(Tag.repository, Log.getStackTraceString(e))
+            Log.e(Const.repository, Log.getStackTraceString(e))
             emit(Resource.Error(UiText.DynamicString(e.message ?: "Unknown Error")))
         }
     }.flowOn(Dispatchers.IO)
@@ -70,10 +70,10 @@ class Repository(private val mFavDao: FavoriteDao) {
             val response: Language = LanguagesData.listData.first {
                 it.id == id
             }
-            Log.d(Tag.repository, response.toString())
+            Log.d(Const.repository, response.toString())
             emit(Resource.Success(response))
         } catch (e: Exception) {
-            Log.e(Tag.repository, Log.getStackTraceString(e))
+            Log.e(Const.repository, Log.getStackTraceString(e))
             when (e) {
                 is NoSuchElementException -> {
                     emit(Resource.Error(UiText.StringResource(R.string.empty_detail)))
@@ -97,10 +97,10 @@ class Repository(private val mFavDao: FavoriteDao) {
         emit(Resource.Loading)
         try {
             val response = mFavDao.isFavorite(id)
-            Log.d(Tag.repository, response.toString())
+            Log.d(Const.repository, response.toString())
             emit(Resource.Success(response))
         } catch (e: Exception) {
-            Log.e(Tag.repository, Log.getStackTraceString(e))
+            Log.e(Const.repository, Log.getStackTraceString(e))
             emit(Resource.Error(UiText.DynamicString(e.message ?: "Unknown Error")))
         }
     }.flowOn(Dispatchers.IO)
