@@ -21,6 +21,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.sp
@@ -49,6 +51,7 @@ fun DetailScreen(
     val favState = detailViewModel.favState.collectAsState()
     var isFav by rememberSaveable { mutableStateOf(false) }
     var language by rememberSaveable { mutableStateOf<Language?>(null) }
+    val context = LocalContext.current
     Scaffold(
         topBar = {
             TopAppBar(
@@ -62,6 +65,9 @@ fun DetailScreen(
                     IconButton(
                         onClick = {
                             navigateBack()
+                        },
+                        modifier = modifier.semantics(mergeDescendants = true) {
+                            contentDescription = context.getString(R.string.back_hint)
                         }
                     ) {
                         Icon(
@@ -74,7 +80,11 @@ fun DetailScreen(
         },
         floatingActionButton = {
             FloatingActionButton(
-                modifier = Modifier.padding(spacingRegular),
+                modifier = Modifier
+                    .semantics(mergeDescendants = true) {
+                        contentDescription = if (isFav) "Favored" else "Not Favored"
+                    }
+                    .padding(spacingRegular),
                 onClick = {
                     detailViewModel.apply {
                         language?.let { if (isFav) removeFromFavorite(it) else addedToFavorite(it) }
@@ -113,7 +123,10 @@ fun DetailScreen(
             when (state) {
                 UiState.Initial -> detailViewModel.getLanguageDetails(id)
                 is UiState.Loading -> CircularProgressIndicator()
-                is UiState.Empty -> EmptyContentScreen(id = R.string.empty_detail, modifier = modifier )
+                is UiState.Empty -> EmptyContentScreen(
+                    id = R.string.empty_detail,
+                    modifier = modifier
+                )
                 is UiState.Success -> {
                     language = state.data
                     DetailScreenContent(state.data)

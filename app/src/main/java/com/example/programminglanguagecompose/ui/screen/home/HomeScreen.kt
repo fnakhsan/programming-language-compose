@@ -31,6 +31,7 @@ import com.example.programminglanguagecompose.ui.common.UiState
 import com.example.programminglanguagecompose.ui.components.EmptyContentScreen
 import com.example.programminglanguagecompose.ui.components.ProgrammingLanguageItems
 import com.example.programminglanguagecompose.ui.values.spacingRegular
+import com.example.programminglanguagecompose.utils.Const.tagTestList
 import com.example.programminglanguagecompose.utils.UiText.Companion.asString
 import com.example.programminglanguagecompose.utils.ViewModelFactory
 
@@ -118,7 +119,7 @@ fun HomeScreenContent(
     LazyColumn(
         state = listState,
         contentPadding = PaddingValues(bottom = 80.dp),
-        modifier = modifier.testTag("LanguageList")
+        modifier = modifier.testTag(tagTestList)
     ) {
         item {
 //            IDK why we must put this item {} code

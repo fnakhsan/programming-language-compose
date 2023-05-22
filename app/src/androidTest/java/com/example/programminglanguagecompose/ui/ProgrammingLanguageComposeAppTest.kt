@@ -11,6 +11,7 @@ import com.example.programminglanguagecompose.data.model.LanguagesData
 import com.example.programminglanguagecompose.ui.navigation.Screen
 import com.example.programminglanguagecompose.ui.theme.ProgrammingLanguageComposeTheme
 import com.example.programminglanguagecompose.utils.Const.tagTestList
+import com.example.programminglanguagecompose.R
 import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Rule
@@ -47,5 +48,31 @@ class ProgrammingLanguageComposeAppTest {
         composeTestRule.onNodeWithText(dummyLanguage.name).performClick()
         navController.assertCurrentRouteName(Screen.DetailLanguage.route)
         composeTestRule.onNodeWithText(dummyLanguage.name).assertIsDisplayed()
+    }
+
+    @Test
+    fun navHost_navigatesToFavorite() {
+        composeTestRule.onNodeWithText("Favorite").performClick()
+        navController.assertCurrentRouteName(Screen.Favorite.route)
+    }
+
+    @Test
+    fun navHost_navigatesToProfile() {
+        composeTestRule.onNodeWithText("Profile").performClick()
+        navController.assertCurrentRouteName(Screen.Profile.route)
+    }
+
+    @Test
+    fun navHost_navigatesToDetail_thenAddToFavorite_andThenRemoveToFavorite() {
+        composeTestRule.onNodeWithTag(tagTestList).performScrollToIndex(9)
+        composeTestRule.onNodeWithText(dummyLanguage.name).performClick()
+        composeTestRule.onNodeWithContentDescription("Not Favored").performClick()
+        composeTestRule.onNodeWithContentDescription(composeTestRule.activity.getString(R.string.back_hint)).performClick()
+        composeTestRule.onNodeWithText("Favorite").performClick()
+        composeTestRule.onNodeWithText(dummyLanguage.name).assertIsDisplayed()
+        composeTestRule.onNodeWithText(dummyLanguage.name).performClick()
+        composeTestRule.onNodeWithContentDescription("Favored").performClick()
+        composeTestRule.onNodeWithContentDescription(composeTestRule.activity.getString(R.string.back_hint)).performClick()
+        composeTestRule.onNodeWithText(dummyLanguage.name).assertDoesNotExist()
     }
 }
