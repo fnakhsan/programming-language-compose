@@ -1,13 +1,8 @@
 package com.example.programminglanguagecompose.ui.screen.home
 
 import android.widget.Toast
-import androidx.compose.animation.core.tween
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.LazyListState
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
@@ -21,17 +16,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.programminglanguagecompose.R
-import com.example.programminglanguagecompose.data.model.Language
 import com.example.programminglanguagecompose.ui.common.UiState
 import com.example.programminglanguagecompose.ui.components.EmptyContentScreen
-import com.example.programminglanguagecompose.ui.components.ProgrammingLanguageItems
+import com.example.programminglanguagecompose.ui.components.LanguageListContentScreen
 import com.example.programminglanguagecompose.ui.values.spacingRegular
-import com.example.programminglanguagecompose.utils.Const.tagTestList
 import com.example.programminglanguagecompose.utils.UiText.Companion.asString
 import com.example.programminglanguagecompose.utils.ViewModelFactory
 
@@ -64,7 +56,11 @@ fun HomeScreen(
                     UiState.Initial -> homeViewModel.getLanguages()
                     is UiState.Loading -> CircularProgressIndicator()
                     is UiState.Empty -> EmptyContentScreen(R.string.empty_lang, modifier)
-                    is UiState.Success -> HomeScreenContent(listState, state.data, navigateToDetail = navigateToDetail)
+                    is UiState.Success -> LanguageListContentScreen(
+                        listState,
+                        state.data,
+                        navigateToDetail = navigateToDetail
+                    )
                     is UiState.Error -> Toast.makeText(
                         LocalContext.current,
                         state.error.asString(LocalContext.current),
@@ -106,34 +102,4 @@ fun SearchBar(
             .heightIn(min = 48.dp)
             .clip(RoundedCornerShape(spacingRegular))
     )
-}
-
-@OptIn(ExperimentalFoundationApi::class)
-@Composable
-fun HomeScreenContent(
-    listState: LazyListState,
-    data: List<Language>,
-    modifier: Modifier = Modifier,
-    navigateToDetail: (Int) -> Unit,
-) {
-    LazyColumn(
-        state = listState,
-        contentPadding = PaddingValues(bottom = 80.dp),
-        modifier = modifier.testTag(tagTestList)
-    ) {
-        item {
-//            IDK why we must put this item {} code
-//            (if you delete it then the list will not automatically scroll to the top,
-//            when the user delete the search query)
-        }
-        items(data, key = { it.name }) { language ->
-            ProgrammingLanguageItems(
-                language,
-                modifier = modifier
-                    .fillMaxWidth()
-                    .animateItemPlacement(tween(durationMillis = 100)),
-                navigateToDetail = navigateToDetail
-            )
-        }
-    }
 }
