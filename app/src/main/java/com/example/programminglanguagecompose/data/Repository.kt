@@ -38,7 +38,7 @@ class Repository(private val mFavDao: FavoriteDao) {
         }
     }.flowOn(Dispatchers.IO)
 
-    fun getFavoriteLanguages(): Flow<Resource<List<Language>>> = flow {
+    fun getFavoriteLanguages(): Flow<Resource<Flow<List<Language>>>> = flow {
         emit(Resource.Loading)
         try {
             val response = mFavDao.getAllFav()
@@ -50,10 +50,10 @@ class Repository(private val mFavDao: FavoriteDao) {
         }
     }.flowOn(Dispatchers.IO)
 
-    fun searchFavLanguages(query: String): Flow<Resource<List<Language>>> = flow {
+    fun searchFavoriteLanguages(query: String): Flow<Resource<Flow<List<Language>>>> = flow {
         emit(Resource.Loading)
         try {
-            val response = mFavDao.searchFav(query)
+            val response = mFavDao.searchFav("%$query%")
             Log.d(Tag.repository, response.toString())
             emit(Resource.Success(response))
         } catch (e: Exception) {

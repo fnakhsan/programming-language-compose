@@ -1,6 +1,5 @@
 package com.example.programminglanguagecompose.ui
 
-import android.util.Log
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
@@ -27,7 +26,6 @@ import com.example.programminglanguagecompose.ui.screen.detail.DetailScreen
 import com.example.programminglanguagecompose.ui.screen.favorite.FavoriteScreen
 import com.example.programminglanguagecompose.ui.screen.home.HomeScreen
 import com.example.programminglanguagecompose.ui.screen.profile.ProfileScreen
-import com.example.programminglanguagecompose.utils.Tag
 
 @Composable
 fun ProgrammingLanguageComposeApp(
@@ -42,7 +40,7 @@ fun ProgrammingLanguageComposeApp(
                 BottomBar(navController)
             }
         },
-        modifier = Modifier
+        modifier = modifier
     ) { innerPadding ->
         NavHost(
             navController = navController,
@@ -53,28 +51,30 @@ fun ProgrammingLanguageComposeApp(
                 HomeScreen(
                     navigateToDetail = { keyId ->
                         navController.navigate(Screen.DetailLanguage.createRoute(keyId))
-                        Log.d(Tag.repository, "This is the value that i pass to the detail: $keyId")
                     }
                 )
+            }
+            composable(Screen.Favorite.route) {
+                FavoriteScreen(
+                    navigateToDetail = { keyId ->
+                        navController.navigate(Screen.DetailLanguage.createRoute(keyId))
+                    }
+                )
+            }
+            composable(Screen.Profile.route) {
+                ProfileScreen()
             }
             composable(
                 route = Screen.DetailLanguage.route,
                 arguments = listOf(navArgument(keyId) { type = NavType.IntType }),
             ) {
                 val id = it.arguments?.getInt(keyId) ?: -1
-                Log.d(Tag.repository, "And this is what i got: $id")
                 DetailScreen(
                     id = id,
                     navigateBack = {
                         navController.navigateUp()
                     }
                 )
-            }
-            composable(Screen.Favorite.route) {
-                FavoriteScreen()
-            }
-            composable(Screen.Profile.route) {
-                ProfileScreen()
             }
         }
     }

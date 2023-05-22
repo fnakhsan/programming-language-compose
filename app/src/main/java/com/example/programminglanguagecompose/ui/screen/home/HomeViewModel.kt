@@ -8,6 +8,7 @@ import com.example.programminglanguagecompose.data.Repository
 import com.example.programminglanguagecompose.data.Resource
 import com.example.programminglanguagecompose.data.model.Language
 import com.example.programminglanguagecompose.ui.common.UiState
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
@@ -21,7 +22,7 @@ class HomeViewModel(private val repository: Repository) : ViewModel() {
     val query: State<String> get() = _query
 
     fun getLanguages() {
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             repository.getLanguages().collect { resource ->
                 when (resource) {
                     Resource.Loading -> _listProgrammingLanguageState.emit(UiState.Loading(true))
@@ -40,7 +41,7 @@ class HomeViewModel(private val repository: Repository) : ViewModel() {
 
     fun searchLanguages(newQuery: String) {
         _query.value = newQuery
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             repository.searchLanguages(newQuery).collect { resource ->
                 when (resource) {
                     Resource.Loading -> _listProgrammingLanguageState.emit(UiState.Loading(true))

@@ -4,6 +4,7 @@
     <string name="favorite">Favorite</string>
     <string name="profile">Profile</string>
     <string name="search_hint">Find your programming language here!</string>
+    <string name="search_fav_hint">Find your favorite language here!</string>
     <string name="text_error_unknown">Unknown Error.</string>
     <string name="developer">Developer</string>
     <string name="paradigm">Paradigm</string>
