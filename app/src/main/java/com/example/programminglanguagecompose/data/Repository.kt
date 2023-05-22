@@ -1,6 +1,7 @@
 package com.example.programminglanguagecompose.data
 
 import android.util.Log
+import com.example.programminglanguagecompose.R
 import com.example.programminglanguagecompose.data.local.database.FavoriteDao
 import com.example.programminglanguagecompose.data.model.Language
 import com.example.programminglanguagecompose.data.model.LanguagesData
@@ -75,7 +76,7 @@ class Repository(private val mFavDao: FavoriteDao) {
             Log.e(Tag.repository, Log.getStackTraceString(e))
             when (e) {
                 is NoSuchElementException -> {
-                    emit(Resource.Error(UiText.DynamicString("Language details cannot be found")))
+                    emit(Resource.Error(UiText.StringResource(R.string.empty_detail)))
                 }
                 else -> {
                     emit(Resource.Error(UiText.DynamicString(e.message ?: "Unknown Error")))
@@ -95,7 +96,6 @@ class Repository(private val mFavDao: FavoriteDao) {
     fun isFavorite(id: Int): Flow<Resource<Boolean>> = flow {
         emit(Resource.Loading)
         try {
-            //lol idk how to create a proper filtering for this
             val response = mFavDao.isFavorite(id)
             Log.d(Tag.repository, response.toString())
             emit(Resource.Success(response))

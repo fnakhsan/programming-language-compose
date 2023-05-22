@@ -16,7 +16,6 @@ class ViewModelFactory private constructor(private val repository: Repository): 
             modelClass.isAssignableFrom(HomeViewModel::class.java) -> return HomeViewModel(repository) as T
             modelClass.isAssignableFrom(FavoriteViewModel::class.java) -> return FavoriteViewModel(repository) as T
             modelClass.isAssignableFrom(DetailViewModel::class.java) -> return DetailViewModel(repository) as T
-//            modelClass.isAssignableFrom(FollowViewModel::class.java) -> return FollowViewModel(repository) as T
         }
         throw IllegalArgumentException("Unknown ViewModel Class: " + modelClass.name)
     }

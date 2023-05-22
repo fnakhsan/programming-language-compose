@@ -29,9 +29,13 @@ class FavoriteViewModel(private val repository: Repository) : ViewModel() {
                     is Resource.Success -> {
                         _listFavLanguageState.emit(UiState.Loading(false))
                         resource.data.collect {
-                            _listFavLanguageState.emit(
-                                UiState.Success(it)
-                            )
+                            if (it.isEmpty()) {
+                                _listFavLanguageState.emit(UiState.Empty)
+                            } else {
+                                _listFavLanguageState.emit(
+                                    UiState.Success(it)
+                                )
+                            }
                         }
                     }
                     is Resource.Error -> {
@@ -46,7 +50,7 @@ class FavoriteViewModel(private val repository: Repository) : ViewModel() {
     fun searchFavLanguages(newQuery: String) {
         _query.value = newQuery
         viewModelScope.launch(Dispatchers.IO) {
-            if (newQuery.isNotBlank()) {
+            if (newQuery.isNotBlank() && newQuery.isNotEmpty()) {
                 repository.searchFavoriteLanguages(newQuery).collect { resource ->
                     when (resource) {
                         Resource.Loading -> _listFavLanguageState.emit(UiState.Loading(true))

@@ -12,7 +12,6 @@ import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Favorite
-//import androidx.compose.material.icons.outlined.Favorite
 import androidx.compose.material.icons.twotone.Favorite
 import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -30,7 +29,7 @@ import coil.compose.AsyncImage
 import com.example.programminglanguagecompose.R
 import com.example.programminglanguagecompose.data.model.Language
 import com.example.programminglanguagecompose.ui.common.UiState
-import com.example.programminglanguagecompose.ui.screen.home.HomeScreenEmptyContent
+import com.example.programminglanguagecompose.ui.components.EmptyContentScreen
 import com.example.programminglanguagecompose.ui.values.spacingLarge
 import com.example.programminglanguagecompose.ui.values.spacingRegular
 import com.example.programminglanguagecompose.utils.UiText.Companion.asString
@@ -114,7 +113,7 @@ fun DetailScreen(
             when (state) {
                 UiState.Initial -> detailViewModel.getLanguageDetails(id)
                 is UiState.Loading -> CircularProgressIndicator()
-                is UiState.Empty -> HomeScreenEmptyContent()
+                is UiState.Empty -> EmptyContentScreen(id = R.string.empty_detail, modifier = modifier )
                 is UiState.Success -> {
                     language = state.data
                     DetailScreenContent(state.data)

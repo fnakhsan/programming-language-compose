@@ -10,4 +10,9 @@
     <string name="paradigm">Paradigm</string>
     <string name="text_detail">Language Details</string>
     <string name="back_hint">Return to home</string>
+    <string name="username">Fatkhi Nur Akhsan</string>
+    <string name="email">fatkhinurakhsan@gmail.com</string>
+    <string name="empty_lang">Does not have a list of programming languages to display</string>
+    <string name="empty_fav">Add your favorite programming languages first</string>
+    <string name="empty_detail">Language details cannot be found</string>
 </resources>

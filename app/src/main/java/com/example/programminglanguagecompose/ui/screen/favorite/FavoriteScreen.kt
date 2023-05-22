@@ -27,6 +27,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.programminglanguagecompose.R
 import com.example.programminglanguagecompose.data.model.Language
 import com.example.programminglanguagecompose.ui.common.UiState
+import com.example.programminglanguagecompose.ui.components.EmptyContentScreen
 import com.example.programminglanguagecompose.ui.components.ProgrammingLanguageItems
 import com.example.programminglanguagecompose.ui.values.spacingRegular
 import com.example.programminglanguagecompose.utils.UiText.Companion.asString
@@ -60,7 +61,7 @@ fun FavoriteScreen(
                 when (state) {
                     UiState.Initial -> favoriteViewModel.getFavLanguages()
                     is UiState.Loading -> CircularProgressIndicator()
-                    is UiState.Empty -> FavoriteScreenEmptyContent()
+                    is UiState.Empty -> EmptyContentScreen(R.string.empty_fav, modifier)
                     is UiState.Success -> FavoriteScreenContent(listState, state.data, navigateToDetail = navigateToDetail)
                     is UiState.Error -> Toast.makeText(
                         LocalContext.current,
@@ -71,11 +72,6 @@ fun FavoriteScreen(
             }
         }
     }
-}
-
-@Composable
-fun FavoriteScreenEmptyContent() {
-
 }
 
 @Composable

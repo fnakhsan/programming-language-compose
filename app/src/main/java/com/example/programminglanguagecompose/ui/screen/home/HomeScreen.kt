@@ -22,14 +22,13 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.programminglanguagecompose.R
 import com.example.programminglanguagecompose.data.model.Language
 import com.example.programminglanguagecompose.ui.common.UiState
+import com.example.programminglanguagecompose.ui.components.EmptyContentScreen
 import com.example.programminglanguagecompose.ui.components.ProgrammingLanguageItems
-import com.example.programminglanguagecompose.ui.theme.ProgrammingLanguageComposeTheme
 import com.example.programminglanguagecompose.ui.values.spacingRegular
 import com.example.programminglanguagecompose.utils.UiText.Companion.asString
 import com.example.programminglanguagecompose.utils.ViewModelFactory
@@ -62,7 +61,7 @@ fun HomeScreen(
                 when (state) {
                     UiState.Initial -> homeViewModel.getLanguages()
                     is UiState.Loading -> CircularProgressIndicator()
-                    is UiState.Empty -> HomeScreenEmptyContent()
+                    is UiState.Empty -> EmptyContentScreen(R.string.empty_lang, modifier)
                     is UiState.Success -> HomeScreenContent(listState, state.data, navigateToDetail = navigateToDetail)
                     is UiState.Error -> Toast.makeText(
                         LocalContext.current,
@@ -107,11 +106,6 @@ fun SearchBar(
     )
 }
 
-@Composable
-fun HomeScreenEmptyContent() {
-
-}
-
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun HomeScreenContent(
@@ -138,18 +132,5 @@ fun HomeScreenContent(
                 navigateToDetail = navigateToDetail
             )
         }
-    }
-}
-
-
-@Preview(showBackground = true)
-@Composable
-fun HomeScreenPreview() {
-    ProgrammingLanguageComposeTheme {
-//        HomeScreen(
-//            navigateToDetail = { name ->
-//                navController.navigate(Screen.DetailLanguage.createRoute(name))
-//            }
-//        )
     }
 }
