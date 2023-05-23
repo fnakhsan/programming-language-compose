@@ -32,7 +32,7 @@ import com.example.programminglanguagecompose.ui.values.spacingTiny
 import com.example.programminglanguagecompose.ui.values.textLarger
 
 @Composable
-fun ProfileScreen() {
+fun AboutScreen() {
     val context = LocalContext.current
     val emailAddress = stringResource(id = R.string.email)
     Column(
@@ -78,6 +78,6 @@ fun ProfileScreen() {
 
 @Preview(showBackground = true, device = Devices.PIXEL_4)
 @Composable
-fun ProfileScreenPreview() {
-    ProfileScreen()
+fun AboutScreenPreview() {
+    AboutScreen()
 }

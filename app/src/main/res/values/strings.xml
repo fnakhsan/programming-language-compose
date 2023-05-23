@@ -2,7 +2,7 @@
     <string name="app_name">Programming Language Compose</string>
     <string name="home">Home</string>
     <string name="favorite">Favorite</string>
-    <string name="profile">Profile</string>
+    <string name="about">About</string>
     <string name="search_hint">Find your programming language here!</string>
     <string name="search_fav_hint">Find your favorite language here!</string>
     <string name="text_error_unknown">Unknown Error.</string>
@@ -15,4 +15,7 @@
     <string name="empty_lang">Does not have a list of programming languages to display</string>
     <string name="empty_fav">Add your favorite programming languages first</string>
     <string name="empty_detail">Language details cannot be found</string>
+    <string name="home_page">Home Page</string>
+    <string name="favorite_page">Favorite Page</string>
+    <string name="about_page">About Page</string>
 </resources>

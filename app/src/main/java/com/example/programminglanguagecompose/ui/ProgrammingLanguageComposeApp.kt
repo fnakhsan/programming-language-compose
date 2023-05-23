@@ -24,7 +24,7 @@ import com.example.programminglanguagecompose.ui.navigation.Screen
 import com.example.programminglanguagecompose.ui.screen.detail.DetailScreen
 import com.example.programminglanguagecompose.ui.screen.favorite.FavoriteScreen
 import com.example.programminglanguagecompose.ui.screen.home.HomeScreen
-import com.example.programminglanguagecompose.ui.screen.profile.ProfileScreen
+import com.example.programminglanguagecompose.ui.screen.profile.AboutScreen
 import com.example.programminglanguagecompose.utils.Const.navKeyId
 
 @Composable
@@ -61,8 +61,8 @@ fun ProgrammingLanguageComposeApp(
                     }
                 )
             }
-            composable(Screen.Profile.route) {
-                ProfileScreen()
+            composable(Screen.About.route) {
+                AboutScreen()
             }
             composable(
                 route = Screen.DetailLanguage.route,
@@ -95,17 +95,20 @@ private fun BottomBar(
             NavigationItem(
                 title = stringResource(string.home),
                 icon = Icons.Default.Home,
-                screen = Screen.Home
+                screen = Screen.Home,
+                contentDesc = stringResource(string.home_page)
             ),
             NavigationItem(
                 title = stringResource(string.favorite),
                 icon = Icons.Default.Favorite,
-                screen = Screen.Favorite
+                screen = Screen.Favorite,
+                contentDesc = stringResource(string.about_page)
             ),
             NavigationItem(
-                title = stringResource(string.profile),
+                title = stringResource(string.about),
                 icon = Icons.Default.AccountCircle,
-                screen = Screen.Profile
+                screen = Screen.About,
+                contentDesc = stringResource(string.about_page)
             ),
         )
         BottomNavigation {
@@ -114,7 +117,7 @@ private fun BottomBar(
                     icon = {
                         Icon(
                             imageVector = item.icon,
-                            contentDescription = item.title
+                            contentDescription = item.contentDesc
                         )
                     },
                     label = { Text(item.title) },
