@@ -57,9 +57,9 @@ class ProgrammingLanguageComposeAppTest {
     }
 
     @Test
-    fun navHost_navigatesToProfile() {
-        composeTestRule.onNodeWithText("Profile").performClick()
-        navController.assertCurrentRouteName(Screen.Profile.route)
+    fun navHost_navigatesToAbout() {
+        composeTestRule.onNodeWithText("About").performClick()
+        navController.assertCurrentRouteName(Screen.About.route)
     }
 
     @Test
